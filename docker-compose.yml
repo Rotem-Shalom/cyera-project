@@ -1,0 +1,85 @@
+version: "3.8"
+
+services:
+  user-service:
+    build: ./services/user-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    environment:
+      - PORT=3001
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=microservices
+      - RABBITMQ_URL=amqp://rabbitmq
+
+  order-service:
+    build: ./services/order-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      postgres:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    environment:
+      - PORT=3002
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=microservices
+      - RABBITMQ_URL=amqp://rabbitmq
+
+  auth-service:
+    build: ./services/auth-service
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - JWT_SECRET=supersecret
+
+  gateway-service:
+    build: ./services/gateway-service
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - user-service
+      - order-service
+    environment:
+      - PORT=3000
+      - AUTH_URL=http://auth-service:3003
+      - USER_SERVICE_URL=http://user-service:3001
+      - ORDER_SERVICE_URL=http://order-service:3002
+
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: microservices
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
