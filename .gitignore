@@ -31,6 +31,5 @@ Thumbs.db
 # Optional: coverage reports
 coverage/
 
-# Optional: npm package lock files (תלוי אם רוצים לנהל או לא)
 package-lock.json
 yarn.lock

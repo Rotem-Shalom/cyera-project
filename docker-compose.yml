@@ -6,10 +6,10 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      postgres:
-        condition: service_started
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - PORT=3001
       - DB_HOST=postgres
@@ -24,10 +24,10 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      postgres:
-        condition: service_started
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - PORT=3002
       - DB_HOST=postgres
@@ -69,6 +69,11 @@ services:
       POSTGRES_DB: microservices
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -77,9 +82,9 @@ services:
       - "15672:15672"
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
 volumes:
   pgdata:
