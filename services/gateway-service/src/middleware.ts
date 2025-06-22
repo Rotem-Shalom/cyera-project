@@ -11,9 +11,9 @@ export async function verifyTokenMiddleware(req: Request, res: Response, next: N
   if (!token) return res.status(401).json({ message: 'Token missing' });
 
   try {
-    await axios.post(`${AUTH_SERVICE_URL}/auth/verify`, {}, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.get(`${AUTH_SERVICE_URL}/auth/verify`, {
+    headers: { Authorization: `Bearer ${token}` },
+});
     next();
   } catch {
     res.status(401).json({ message: 'Invalid token' });
