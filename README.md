@@ -1,1 +1,27 @@
-# cyera-project
+# Microservices System
+
+# services
+
+- User Service: manages users
+- Order Service: manages orders
+- Auth Service: issues and validates JWT tokens
+- Gateway Service: API gateway that verifies JWT tokens and forwards requests
+- RabbitMQ: message broker
+- PostgreSQL: database
+
+## Prerequisites
+
+- Docker
+- Docker Compose
+
+## To build and start all services:
+
+```bash
+docker compose up --build
+```
+
+## To build and start all services including automated tests:
+
+```bash
+docker compose --profile test up --build --exit-code-from tester
+```
