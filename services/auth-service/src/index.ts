@@ -8,6 +8,11 @@ const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(express.json());
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.use(authRouter);
 
 app.listen(PORT, () => {

@@ -1,0 +1,14 @@
+# Dockerfile.test
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY tests/package*.json ./
+COPY tests/tsconfig.json ./
+COPY tests/jest.config.js ./
+
+RUN npm install
+
+COPY tests/ ./
+
+CMD ["npm", "test"]

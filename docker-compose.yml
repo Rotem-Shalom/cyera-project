@@ -18,6 +18,12 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=microservices
       - RABBITMQ_URL=amqp://rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   order-service:
     build: ./services/order-service
@@ -36,6 +42,12 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=microservices
       - RABBITMQ_URL=amqp://rabbitmq
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3002/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   auth-service:
     build: ./services/auth-service
@@ -44,6 +56,12 @@ services:
     environment:
       - PORT=3003
       - JWT_SECRET=supersecret
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3003/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   gateway-service:
     build: ./services/gateway-service
@@ -58,6 +76,12 @@ services:
       - AUTH_URL=http://auth-service:3003
       - USER_SERVICE_URL=http://user-service:3001
       - ORDER_SERVICE_URL=http://order-service:3002
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   postgres:
     image: postgres
@@ -86,20 +110,24 @@ services:
       timeout: 5s
       retries: 5
 
-  # tester:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.test
-  #   depends_on:
-  #     - gateway-service
-  #     - auth-service
-  #     - user-service
-  #     - order-service
-  #     - postgres
-  #     - rabbitmq
-  #   environment:
-  #     - GATEWAY_URL=http://gateway-service:3000
-  #   command: ["npm", "test"]
+  tester:
+    build:
+      context: .
+      dockerfile: tests/Dockerfile.test
+    depends_on:
+      gateway-service:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+    environment:
+      - GATEWAY_URL=http://gateway-service:3000
+      - AUTH_URL=http://auth-service:3003
+
+    command: ["npm", "test"]
 
 volumes:
   pgdata:
