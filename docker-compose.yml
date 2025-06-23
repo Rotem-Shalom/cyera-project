@@ -22,8 +22,10 @@ services:
       test: ["CMD-SHELL", "curl -f http://localhost:3001/health || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 10
       start_period: 5s
+    volumes:
+      - ./logs/mq-events:/app/logs
 
   order-service:
     build: ./services/order-service
@@ -48,6 +50,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    volumes:
+      - ./logs/mq-events:/app/logs
 
   auth-service:
     build: ./services/auth-service
@@ -108,7 +112,7 @@ services:
       test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
 
   tester:
     build:
@@ -126,9 +130,12 @@ services:
     environment:
       - GATEWAY_URL=http://gateway-service:3000
       - AUTH_URL=http://auth-service:3003
+      - MQ_EVENT_LOGS_URL=/app/logs/mq-events/consumer-events.log
     command: ["npm", "test"]
     profiles:
       - test
+    volumes:
+      - ./logs/mq-events:/app/logs/mq-events
 
 volumes:
   pgdata:

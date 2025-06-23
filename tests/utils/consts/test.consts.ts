@@ -1,3 +1,7 @@
+export const DEFAULT_MQ_EVENT_LOGS_URL= '../../logs/mq-events/consumer-events.log'
+export const DEFAULT_GATEWAY_URL= 'http://localhost:3000'
+export const DEFAULT_AUTH_URL= 'http://localhost:3003'
+
 export const ROUTES = {
   AUTH_LOGIN: '/auth/login',
   USERS: '/users',
@@ -7,6 +11,7 @@ export const ROUTES = {
 };
 
 export const URLS = {
-  GATEWAY: process.env.GATEWAY_URL || 'http://gateway-service:3000',
-  AUTH: process.env.AUTH_URL || 'http://auth-service:3003',
+  GATEWAY: process.env.GATEWAY_URL || DEFAULT_GATEWAY_URL,
+  AUTH: process.env.AUTH_URL || DEFAULT_AUTH_URL,
 };
+

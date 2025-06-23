@@ -2,7 +2,9 @@ import request from 'supertest';
 import { AuthLoginRequest, AuthLoginResponse } from '../utils/models/auth.model';
 import { CreateUserRequest, UserResponse } from '../utils/models/user.model';
 import { CreateOrderRequest, OrderResponse, OrdersResponse } from '../utils/models/order.model';
-import { URLS, ROUTES } from '../utils/consts/test.consts';
+import { URLS, ROUTES, DEFAULT_MQ_EVENT_LOGS_URL} from '../utils/consts/test.consts';
+import fs from 'fs';
+import path from 'path';
 
 describe('End-to-End System Test', () => {
   let token: string;
@@ -74,6 +76,17 @@ describe('End-to-End System Test', () => {
 
     res_body.forEach(order => {
       expect(order.user_id).toEqual(userId);
+    });
+  });
+
+  describe('Event Log Test', () => {
+    it('should include user.created event in log file', async () => {
+      const rawPath = process.env.MQ_EVENT_LOGS_URL || DEFAULT_MQ_EVENT_LOGS_URL;
+      const logFilePath = path.isAbsolute(rawPath) ? rawPath : path.resolve(__dirname, rawPath);
+      const logs = await fs.promises.readFile(logFilePath, 'utf-8');
+      expect(logs).toMatch(/Received user.created event/);
+      expect(logs).toMatch(/test@example.com/); 
+      expect(logs).toMatch(/Book/); 
     });
   });
 });
