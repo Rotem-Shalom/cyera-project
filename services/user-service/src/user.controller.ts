@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import * as userService from './userService';
-import { publishToQueue } from './mq/mqProducer';
+import * as userService from './user.service';
+import { publishToQueue } from './mq/mq.producer';
 
 export async function createUser(req: Request, res: Response) {
   console.log('createUser with request');

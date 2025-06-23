@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as gatewayService from './service';
+import * as gatewayService from './gateway.service';
 
 export async function createUser(req: Request, res: Response) {
   try {

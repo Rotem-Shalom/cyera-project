@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import routes from './routes';
-import { verifyTokenMiddleware } from './middleware';
+import routes from './gateway.routes';
+import { verifyTokenMiddleware } from './gateway.middleware';
 
 dotenv.config();
 

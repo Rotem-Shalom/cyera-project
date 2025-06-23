@@ -86,5 +86,20 @@ services:
       timeout: 5s
       retries: 5
 
+  # tester:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.test
+  #   depends_on:
+  #     - gateway-service
+  #     - auth-service
+  #     - user-service
+  #     - order-service
+  #     - postgres
+  #     - rabbitmq
+  #   environment:
+  #     - GATEWAY_URL=http://gateway-service:3000
+  #   command: ["npm", "test"]
+
 volumes:
   pgdata:

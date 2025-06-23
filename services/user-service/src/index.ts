@@ -1,9 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { runMigrations } from './db/runMigration';  
-import routes from './routes';
-import { connectRabbitMQ } from './mq/mqProducer';
-import { ConsumeUserCreatedEvent } from './mq/mqConsumer';
+import routes from './user.routes';
+import { connectRabbitMQ } from './mq/mq.producer';
+import { ConsumeUserCreatedEvent } from './mq/mq.consumer';
 
 dotenv.config();
 

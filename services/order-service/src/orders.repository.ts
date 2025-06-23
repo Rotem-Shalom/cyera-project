@@ -1,12 +1,5 @@
 import { query } from './db';
-
-export interface Order {
-  id?: number;
-  user_id: number;
-  product: string;
-  amount: number;
-  created_at?: Date;
-}
+import { Order } from './models/order.model';
 
 export async function createOrder(order: Order): Promise<Order> {
   const { user_id, product, amount } = order;

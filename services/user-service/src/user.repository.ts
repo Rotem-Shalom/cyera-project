@@ -1,16 +1,9 @@
 import { query } from './db';
-
-export interface User {
-  id?: number;
-  name: string;
-  email: string;
-  created_at?: Date;
-}
+import { User } from './models/user.model';
 
 export async function createUser(user: User): Promise<User> {
-  const { name, email } = user;
   const sql = 'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *';
-  const result = await query(sql, [name, email]);
+  const result = await query(sql, [user.name, user.email]);
   return result.rows[0];
 }
 

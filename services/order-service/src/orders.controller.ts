@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as orderService from './ordersService';
+import * as orderService from './orders.service';
 import { publishToQueue } from './mq/mqProducer';
 
 export async function createOrder(req: Request, res: Response) {

@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { runMigrations } from './db/runMigration';  
-import routes from './routes';
+import routes from './orders.routes';
 import { connectRabbitMQ } from './mq/mqProducer';
 import { ConsumeOrderCreatedEvent } from './mq/mqConsumer';
 
