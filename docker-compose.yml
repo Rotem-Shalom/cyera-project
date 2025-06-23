@@ -126,8 +126,9 @@ services:
     environment:
       - GATEWAY_URL=http://gateway-service:3000
       - AUTH_URL=http://auth-service:3003
-
     command: ["npm", "test"]
+    profiles:
+      - test
 
 volumes:
   pgdata:
