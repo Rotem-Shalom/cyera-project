@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import { runMigrations } from './db/runMigration';  
 import routes from './user.routes';
 import { connectRabbitMQ } from './mq/mq.producer';
-import { ConsumeUserCreatedEvent } from './mq/mq.consumer';
+import { connectToDb } from './db/index';
+import { listenToUserCreatedEvents } from './mq/mq.consumer';
 import {checkDbConnection, checkRabbitMQ} from './healthcheck.handler'
 
 dotenv.config();
@@ -25,9 +26,10 @@ app.use(routes);
 
 async function start() {
   try {
-    await runMigrations();  
     await connectRabbitMQ();
-    await ConsumeUserCreatedEvent();
+    await connectToDb()    
+    await runMigrations();  
+    await listenToUserCreatedEvents();
     app.listen(PORT, () => {
       console.log(`User service listening on port ${PORT}`);
     });

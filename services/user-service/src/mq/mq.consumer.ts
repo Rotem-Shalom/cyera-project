@@ -11,7 +11,7 @@ function logEventToFile(event: any) {
   });
 }
 
-export async function ConsumeUserCreatedEvent() {
+export async function listenToUserCreatedEvents() {
   try {
     const connection = await amqp.connect(process.env.RABBITMQ_URL || 'amqp://rabbitmq');
     const channel = await connection.createChannel();

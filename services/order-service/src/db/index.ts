@@ -12,3 +12,22 @@ const pool = new Pool({
 });
 
 export const query = (text: string, params?: any[]) => pool.query(text, params);
+
+const MAX_RETRIES = 5;
+const RETRY_DELAY_MS = 3000;
+
+export async function connectToDb() {
+  for (let i = 0; i < MAX_RETRIES; i++) {
+    try {
+      await pool.query('SELECT 1');
+      console.log('Connected to DB');
+      return;
+    } catch {
+      console.log(`DB connection failed, retrying... (${i + 1}/${MAX_RETRIES})`);
+      await new Promise(res => setTimeout(res, RETRY_DELAY_MS));
+    }
+  }
+  console.error('Could not connect to DB, exiting');
+  process.exit(1);
+}
+
