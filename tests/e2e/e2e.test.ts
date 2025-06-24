@@ -80,11 +80,12 @@ describe('End-to-End System Test', () => {
   });
 
   describe('Event Log Test', () => {
-    it('should include user.created event in log file', async () => {
+    it('should include user.created, order.created event in log file', async () => {
       const rawPath = process.env.MQ_EVENT_LOGS_URL || DEFAULT_MQ_EVENT_LOGS_URL;
       const logFilePath = path.isAbsolute(rawPath) ? rawPath : path.resolve(__dirname, rawPath);
       const logs = await fs.promises.readFile(logFilePath, 'utf-8');
       expect(logs).toMatch(/Received user.created event/);
+      expect(logs).toMatch(/Received order.created event/);
       expect(logs).toMatch(/test@example.com/); 
       expect(logs).toMatch(/Book/); 
     });
