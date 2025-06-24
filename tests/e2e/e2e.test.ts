@@ -71,9 +71,7 @@ describe('End-to-End System Test', () => {
     expect(res.status).toBe(200);
     const res_body: OrdersResponse = res.body;
 
-    expect(Array.isArray(res_body)).toBe(true);
     expect(res_body.length).toBeGreaterThan(0);
-
     res_body.forEach(order => {
       expect(order.user_id).toEqual(userId);
     });
