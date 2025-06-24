@@ -20,6 +20,12 @@
 docker compose up --build
 ```
 
+## To stop all services and delete volumes:
+
+```bash
+docker compose down -v
+```
+
 ## To build and start all services including automated tests:
 
 ```bash
