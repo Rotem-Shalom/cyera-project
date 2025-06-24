@@ -6,8 +6,6 @@
 - Order Service: manages orders
 - Auth Service: issues and validates JWT tokens
 - Gateway Service: API gateway that verifies JWT tokens and forwards requests
-- RabbitMQ: message broker
-- PostgreSQL: database
 
 ## Prerequisites
 
