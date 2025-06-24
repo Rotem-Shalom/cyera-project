@@ -95,8 +95,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: microservices
-    volumes:
-      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -136,6 +134,3 @@ services:
       - test
     volumes:
       - ./logs/mq-events:/app/logs/mq-events
-
-volumes:
-  pgdata:
