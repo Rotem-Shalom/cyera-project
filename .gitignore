@@ -33,3 +33,6 @@ coverage/
 
 package-lock.json
 yarn.lock
+
+# Jest 
+jest-html-reporters-*
